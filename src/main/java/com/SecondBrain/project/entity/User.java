@@ -10,16 +10,16 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Entity                          // Marks this class as a DB table
-@Table(name = "users")           // Table name in PostgreSQL
-@Data                            // Lombok: generates getters, setters, toString, equals, hashCode
-@Builder                         // Lombok: enables User.builder().email("x").build() pattern
-@NoArgsConstructor               // Lombok: generates default constructor (JPA requires this)
-@AllArgsConstructor              // Lombok: generates constructor with all fields
+@Entity
+@Table(name = "users")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Auto-increment like SERIAL in SQL
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "Name is required")
@@ -28,21 +28,21 @@ public class User {
 
     @Email(message = "Invalid email format")
     @NotBlank(message = "Email is required")
-    @Column(nullable = false, unique = true)  // unique = no two users share an email
+    @Column(nullable = false, unique = true)
     private String email;
 
     @NotBlank(message = "Password is required")
     @Column(nullable = false)
-    private String password;    // Will store bcrypt hash, NEVER plaintext
+    private String password;
 
-    @Enumerated(EnumType.STRING)  // Store enum as string "USER" in DB, not 0/1
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @PrePersist  // Called automatically BEFORE INSERT
+    @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }

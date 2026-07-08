@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestControllerAdvice  // Intercepts exceptions thrown by any @RestController
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Handle validation errors (@Valid annotation failures)
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationErrors(
             MethodArgumentNotValidException ex) {
@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
         ));
     }
 
-    // Handle duplicate email registration
+
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<Map<String, Object>> handleUserExists(UserAlreadyExistsException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
         ));
     }
 
-    // Handle wrong email/password on login
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, Object>> handleBadCredentials(BadCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
@@ -54,7 +54,7 @@ public class GlobalExceptionHandler {
         ));
     }
 
-    // Catch-all for unexpected errors
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneral(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(

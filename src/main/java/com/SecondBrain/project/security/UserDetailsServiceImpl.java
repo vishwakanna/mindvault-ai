@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor  // Lombok: generates constructor for all `final` fields (= constructor injection)
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // Spring Security calls this to load a user by "username" (we use email as username)
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
 
@@ -27,7 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 user.getEmail(),
                 user.getPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
-                // "ROLE_USER" or "ROLE_ADMIN" — Spring Security's role convention
+
         );
     }
 }

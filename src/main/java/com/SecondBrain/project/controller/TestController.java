@@ -17,7 +17,7 @@ public class TestController {
 
     @GetMapping("/private")
     public ResponseEntity<String> privateEndpoint(Authentication auth) {
-        // Spring Security injects the Authentication object (set by our JWT filter)
+
         return ResponseEntity.ok("Hello " + auth.getName() + "! Your JWT worked.");
     }
 }

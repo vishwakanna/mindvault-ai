@@ -18,8 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration       // This class provides Spring beans (@Bean methods)
-@EnableWebSecurity   // Activates Spring Security
+@Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -29,24 +29,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Disable CSRF — not needed for stateless JWT APIs (CSRF is for browser session attacks)
+
                 .csrf(AbstractHttpConfigurer::disable)
 
-                // Define which routes are public vs protected
+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/api/test/public").permitAll() // Register & Login = public
                         .anyRequest().authenticated()                  // Everything else = needs JWT
                 )
 
-                // STATELESS: Spring won't create HTTP sessions. Each request must carry its JWT.
+
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                // Use our custom UserDetailsService + BCrypt for authentication
+
                 .authenticationProvider(authenticationProvider())
 
-                // Run our JWT filter BEFORE Spring's default username/password filter
+
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -61,7 +61,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();  // Industry standard — one-way hash with salt
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
