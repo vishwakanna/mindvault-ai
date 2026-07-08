@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: mindvault-postgres
+    environment:
+      POSTGRES_DB: mindvault
+      POSTGRES_USER: vishwa
+      POSTGRES_PASSWORD: vishwa123
+    ports:
+      - "5432:5432"
+    volumes:
+      - /mnt/hdd2/docker-data/postgres:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: mindvault-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - /mnt/hdd2/docker-data/redis:/data
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: mindvault-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: vishwa
+      RABBITMQ_DEFAULT_PASS: vishwa123
+    ports:
+      - "5672:5672"   # app connects here
+      - "15672:15672" # browser dashboard
+    volumes:
+      - /mnt/hdd2/docker-data/rabbitmq:/var/lib/rabbitmq
+    restart: unless-stopped
